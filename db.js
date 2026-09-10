@@ -1,5 +1,9 @@
+const path = require('path');
 const Database = require('better-sqlite3');
-const db = new Database('pos.sqlite');
+// Serverless filesystems (e.g. Vercel) are read-only except /tmp; the DB is
+// ephemeral there. For persistent production data use a hosted database.
+const dbPath = process.env.VERCEL ? path.join('/tmp', 'pos.sqlite') : 'pos.sqlite';
+const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 

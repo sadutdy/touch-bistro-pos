@@ -22,4 +22,5 @@ app.get('/api/billing/:id/receipt', (req,res)=>{const o=detail(req.params.id); r
 app.use((err,_,res,__)=>(console.error(err),fail(res,500,'Internal server error')));
 if (hasDist) app.get('*', (req, res, next) => { if (req.path.startsWith('/api/') || req.path.startsWith('/socket.io')) return next(); res.sendFile(distIndex); });
 io.on('connection', socket=>socket.emit('connected',{id:socket.id}));
-server.listen(process.env.PORT||3000,()=>console.log(`POS listening on http://localhost:${process.env.PORT||3000}`));
+if (require.main === module) server.listen(process.env.PORT||3000,()=>console.log(`POS listening on http://localhost:${process.env.PORT||3000}`));
+module.exports = app;

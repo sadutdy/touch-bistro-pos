@@ -33,6 +33,16 @@ npm run dev
 
 Vite dev server runs on http://localhost:5173 (proxies `/api` and `/socket.io` to the Express server on :3000). For production, Express serves the `dist/` build at http://localhost:3000, so run `npm run build` first. Use `npm start` for a non-reloading production-style launch. Requires Node 18+ for the client build (repo also runs on Node 20; run `npm rebuild better-sqlite3` if you switch Node versions).
 
+## Deploy to Vercel
+
+`vercel.json` builds the client (`npm run build` → `dist/`), serves it statically, and runs Express as a serverless function (`api/index.js` handles `/api/*` and `/socket.io/*`).
+
+```bash
+npx vercel
+```
+
+Caveats: SQLite lives in `/tmp` on Vercel, so data is ephemeral per instance — use a hosted database for real production use. Socket.io realtime pushes are unreliable on serverless; the UI works via REST regardless.
+
 ## API surface
 
 - `GET/PATCH /api/tables`, `GET /api/menu`
